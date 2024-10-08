@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Navegación con DravDrawer</string>
+    <string name="open_nav">Abrir Navigation Drawer</string>
+    <string name="close_nav">Cerrar Navigation Drawer</string>
+    <string name="fragmento_1">Hello Fragmento UNO</string>
+    <string name="fragmento_2">Hello Fragmento DOS</string>
+    <string name="fragmento_3">Hello Fragmento TRES</string>
+    <string name="fragmento_4">Hello Fragmento CUATRO</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
