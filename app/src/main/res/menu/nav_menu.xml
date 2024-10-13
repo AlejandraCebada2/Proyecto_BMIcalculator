@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home"/>
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/notes"
+            android:title="Notes"/>
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/clima"
+            android:title="Clima"/>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/tip_calculator"
+            android:title="Tip Calculator"/>
+
+        <!-- Agrega aquí el nuevo ítem para la calculadora de BMI -->
+        <item
+            android:id="@+id/nav_bmi"
+            android:icon="@drawable/bmi"
+            android:title="Calculadora de BMI"/>
+    </group>
+
+    <item
+        android:title="">
+
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout"/>
+        </menu>
+    </item>
+</menu>

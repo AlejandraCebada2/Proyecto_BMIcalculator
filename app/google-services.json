@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "194319460891",
+    "project_id": "bmi-notes",
+    "storage_bucket": "bmi-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194319460891:android:c9b510e97bd31ba28de6be",
+        "android_client_info": {
+          "package_name": "com.examples.ejemplo_navdrawer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGj9z79LluzPrggEkjYItxSf2W4vKlQN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
