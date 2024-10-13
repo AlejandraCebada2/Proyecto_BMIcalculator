@@ -22,11 +22,14 @@ public class homeFragment extends Fragment {
 
         tvIntroduccion = view.findViewById(R.id.tv_introduccion);
 
-        tvIntroduccion.setText("Bienvenido a nuestra calculadora de Índice de Masa Corporal (BMI). \n\n" +
-                "La calculadora de BMI es una herramienta que te permite calcular tu índice de masa corporal, \n" +
-                "que es un indicador de tu peso en relación con tu altura. \n\n" +
-                "Con nuestra calculadora, podrás calcular tu BMI de manera rápida y fácil, \n" +
-                "y obtener información sobre tu categoría de peso y cómo mejorar tu salud.");
+        tvIntroduccion.setText("Bienvenido a nuestra aplicación de herramientas útiles. \n\n" +
+                "En nuestra aplicación, podrás acceder a una variedad de herramientas prácticas y fáciles de usar, \n" +
+                "como nuestra pantalla de inicio, donde podrás encontrar información importante, \n" +
+                "nuestra calculadora de propinas, para ayudarte a calcular la cantidad adecuada, \n" +
+                "nuestra calculadora de Índice de Masa Corporal (BMI), para evaluar tu salud, \n" +
+                "nuestra sección de clima, para mantenerse informado sobre el tiempo, \n" +
+                "y nuestra herramienta de conversión de divisas, para ayudarte con tus necesidades de cambio de moneda. \n\n" +
+                "Explora nuestra aplicación y descubre todas las formas en que podemos ayudarte.");
 
         return view;
     }

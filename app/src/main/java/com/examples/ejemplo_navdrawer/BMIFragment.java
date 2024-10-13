@@ -10,36 +10,50 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the  factory method to
- * create an instance of this fragment.
- */
 public class BMIFragment extends Fragment {
 
     private EditText etPeso, etAltura;
-    private Button btnCalcular;
+    private Button btnCalcular, btnVerLista;
     private TextView tvResultado;
+    private SharedViewModel sharedViewModel;
 
     public BMIFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bmi, container, false);
 
         etPeso = view.findViewById(R.id.et_peso);
         etAltura = view.findViewById(R.id.et_altura);
         btnCalcular = view.findViewById(R.id.btn_calcular);
+        btnVerLista = view.findViewById(R.id.btn_ver_lista);
         tvResultado = view.findViewById(R.id.tv_resultado);
 
+        // Obtener el ViewModel compartido
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.init(getActivity()); // Asegúrate de pasar el contexto
+
+        // Configurar el botón para calcular el BMI
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calcularBMI();
+            }
+        });
+
+        // Configurar el botón para navegar a la lista de BMIs
+        btnVerLista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new BMIListFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -55,23 +69,30 @@ public class BMIFragment extends Fragment {
             return;
         }
 
-        double peso = Double.parseDouble(pesoStr);
-        double altura = Double.parseDouble(alturaStr) / 100; // Convertir altura de cm a m
+        try {
+            double peso = Double.parseDouble(pesoStr);
+            double altura = Double.parseDouble(alturaStr) / 100; // Convertir altura de cm a m
 
-        double bmi = peso / (altura * altura);
+            double bmi = peso / (altura * altura);
 
-        String resultado = String.format("Tu BMI es: %.2f", bmi);
+            // Agregar el BMI a la lista en el ViewModel
+            sharedViewModel.addBMI(bmi);
 
-        if (bmi < 18.5) {
-            resultado += "\nCategoría: Bajo peso";
-        } else if (bmi < 25) {
-            resultado += "\nCategoría: Peso normal";
-        } else if (bmi < 30) {
-            resultado += "\nCategoría: Sobrepeso";
-        } else {
-            resultado += "\nCategoría: Obesidad";
+            String resultado = String.format("Tu BMI es: %.2f", bmi);
+
+            if (bmi < 18.5) {
+                resultado += "\nCategoría: Bajo peso";
+            } else if (bmi < 25) {
+                resultado += "\nCategoría: Peso normal";
+            } else if (bmi < 30) {
+                resultado += "\nCategoría: Sobrepeso";
+            } else {
+                resultado += "\nCategoría: Obesidad";
+            }
+
+            tvResultado.setText(resultado);
+        } catch (NumberFormatException e) {
+            Toast.makeText(getActivity(), "Error en los valores ingresados", Toast.LENGTH_SHORT).show();
         }
-
-        tvResultado.setText(resultado);
     }
 }

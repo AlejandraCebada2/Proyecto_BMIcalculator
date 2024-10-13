@@ -8,17 +8,26 @@
     android:padding="15dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     >
+
+    <ImageView
+        android:layout_width="212dp"
+        android:layout_height="157dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_modifi"
+         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Universidad UCC"
-        android:textColor="@color/teal_700"
+        android:text="WELCOME TO MEDICAL CARE"
+        android:textColor="#00695C"
         android:textStyle="bold"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="contacto@ucc.mx"
-        android:textColor="@color/teal_700"
+        android:text="BMICalculatorofficial@hotmail.com"
+        android:textColor="#FF1744"
         android:textStyle="bold"/>
 
 </LinearLayout>

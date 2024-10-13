@@ -13,21 +13,22 @@
             android:title="Home"/>
         <item
             android:id="@+id/nav_setting"
-            android:icon="@drawable/settings"
-            android:title="Setting"/>
+            android:icon="@drawable/dividas"
+            android:title="Divisas"/>
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/share"
-            android:title="Share"/>
+            android:icon="@drawable/clima"
+            android:title="Clima"/>
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/about"
-            android:title="About"/>
+            android:icon="@drawable/baseline_calculate_24"
+            android:title="Calcular IMC"/>
 
         <!-- Agrega aquí el nuevo ítem para la calculadora de BMI -->
         <item
+
             android:id="@+id/nav_bmi"
-            android:icon="@drawable/ic_bmi"
+            android:icon="@drawable/bmi"
             android:title="Calculadora de BMI"/>
     </group>
 
