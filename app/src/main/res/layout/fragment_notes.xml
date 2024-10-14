@@ -14,14 +14,13 @@
         android:background="@android:color/white"
         android:layout_marginBottom="8dp" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_note"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Nota"
-        android:background="@android:color/holo_blue_light"
-        android:textColor="@android:color/white"
-        android:padding="10dp" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add" />
 
     <ListView
         android:id="@+id/list_view_notes"

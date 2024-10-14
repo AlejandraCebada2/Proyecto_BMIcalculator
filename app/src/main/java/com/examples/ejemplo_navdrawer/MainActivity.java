@@ -1,5 +1,6 @@
 package com.examples.ejemplo_navdrawer;
 
+import android.content.Intent; // Make sure to import Intent
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -50,9 +51,12 @@ public class MainActivity extends AppCompatActivity
         } else if (val == R.id.nav_share) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ClimaFragment()).commit();
         } else if (val == R.id.nav_about) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TipCalculatorFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ImageUploadFragment()).commit();
         } else if (val == R.id.nav_bmi) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BMIFragment()).commit();
+        } else if (val == R.id.nav_admin) { // Nuevo caso para AdminActivity
+            Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+            startActivity(intent);
         } else if (val == R.id.nav_logout) {
             Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
             // Cerrar la aplicación

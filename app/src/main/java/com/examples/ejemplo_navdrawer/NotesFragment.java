@@ -5,18 +5,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,10 +27,10 @@ import java.util.Map;
 
 public class NotesFragment extends Fragment {
     private EditText editTextNote;
-    private Button buttonAddNote;
+    private FloatingActionButton buttonAddNote;
     private ListView listViewNotes;
-    private ArrayList<Note> notesList;  // Cambiar a una lista de objetos Note
-    private ArrayAdapter<Note> notesAdapter;
+    private ArrayList<Note> notesList;
+    private NotesAdapter notesAdapter;
     private int selectedNoteIndex = -1;
 
     private FirebaseFirestore db;
@@ -48,19 +48,12 @@ public class NotesFragment extends Fragment {
         // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
         notesCollection = db.collection("notes");
-        CollectionReference databaseReference = db.collection("notes");
-        // Cargar notas al inicio
         loadNotes();
 
-        notesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, notesList);
+        notesAdapter = new NotesAdapter();
         listViewNotes.setAdapter(notesAdapter);
 
         buttonAddNote.setOnClickListener(v -> addOrUpdateNote());
-
-        listViewNotes.setOnItemClickListener((parent, view1, position, id) -> {
-            selectedNoteIndex = position;
-            editTextNote.setText(notesList.get(position).getContent());
-        });
 
         return view;
     }
@@ -77,9 +70,8 @@ public class NotesFragment extends Fragment {
                     notesAdapter.notifyDataSetChanged();
                     editTextNote.setText("");
                     Toast.makeText(getActivity(), "Nota agregada", Toast.LENGTH_SHORT).show();
-                    Log.d("NotesFragment", "Nota añadida: " + noteContent); // Añadir log
                 }).addOnFailureListener(e -> {
-                    Log.e("NotesFragment", "Error al añadir nota: " + e.getMessage()); // Log de error
+                    Log.e("NotesFragment", "Error al añadir nota: " + e.getMessage());
                 });
             } else {
                 // Actualizar nota existente
@@ -91,37 +83,85 @@ public class NotesFragment extends Fragment {
                         editTextNote.setText("");
                         selectedNoteIndex = -1;
                         Toast.makeText(getActivity(), "Nota actualizada", Toast.LENGTH_SHORT).show();
-                        Log.d("NotesFragment", "Nota actualizada: " + noteContent); // Añadir log
                     } else {
-                        Log.e("NotesFragment", "Error al actualizar nota: " + task.getException()); // Log de error
+                        Log.e("NotesFragment", "Error al actualizar nota: " + task.getException());
                     }
                 });
             }
         }
     }
 
-
     private void loadNotes() {
         notesCollection.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                notesList.clear(); // Limpiar la lista antes de cargar
+                notesList.clear();
                 for (DocumentSnapshot document : task.getResult()) {
                     String note = document.getString("note");
-                    if (note != null) { // Verificar si el campo existe
-                        notesList.add(new Note(document.getId(), note)); // Guardar ID del documento
-                        Log.d("NotesFragment", "Nota cargada: " + note); // Añadir log
+                    if (note != null) {
+                        notesList.add(new Note(document.getId(), note));
                     }
                 }
                 notesAdapter.notifyDataSetChanged();
+                Log.d("NotesFragment", "Notas cargadas: " + notesList.size()); // Añadir log
             } else {
-                Log.e("NotesFragment", "Error al cargar notas: " + task.getException()); // Log de error
+                Log.e("NotesFragment", "Error al cargar notas: " + task.getException());
                 Toast.makeText(getActivity(), "Error al cargar notas", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private void deleteNote(int position) {
+        String documentId = notesList.get(position).getId();
+        notesCollection.document(documentId).delete().addOnSuccessListener(aVoid -> {
+            notesList.remove(position);
+            notesAdapter.notifyDataSetChanged();
+            Toast.makeText(getActivity(), "Nota eliminada", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Log.e("NotesFragment", "Error al eliminar nota: " + e.getMessage());
+        });
+    }
 
-    // Clase interna para manejar notas con ID
+    private void editNote(int position) {
+        selectedNoteIndex = position;
+        editTextNote.setText(notesList.get(position).getContent());
+    }
+
+    private class NotesAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return notesList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return notesList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.note_item, parent, false);
+            }
+
+            TextView textNote = convertView.findViewById(R.id.text_note);
+            Button buttonEdit = convertView.findViewById(R.id.button_edit);
+            Button buttonDelete = convertView.findViewById(R.id.button_delete);
+
+            Note note = notesList.get(position);
+            textNote.setText(note.getContent());
+
+            buttonEdit.setOnClickListener(v -> editNote(position));
+            buttonDelete.setOnClickListener(v -> deleteNote(position));
+
+            return convertView;
+        }
+    }
+
     private static class Note {
         private String id;
         private String content;
@@ -145,7 +185,7 @@ public class NotesFragment extends Fragment {
 
         @Override
         public String toString() {
-            return content; // Para mostrar el contenido en ListView
+            return content;
         }
     }
 }
