@@ -5,21 +5,20 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/et_ciudad"
+        android:id="@+id/et_bmi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ingrese el nombre de la ciudad" />
+        android:hint="Ingrese su BMI" />
 
     <Button
-        android:id="@+id/btn_buscar"
+        android:id="@+id/btn_compare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar clima" />
+        android:text="Comparar BMI" />
 
-    <TextView
-        android:id="@+id/tv_clima"
+    <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

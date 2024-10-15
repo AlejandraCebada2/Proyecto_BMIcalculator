@@ -3,7 +3,6 @@ package com.examples.ejemplo_navdrawer;
 import android.content.Intent; // Make sure to import Intent
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -49,18 +48,18 @@ public class MainActivity extends AppCompatActivity
         } else if (val == R.id.nav_setting) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
         } else if (val == R.id.nav_share) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ClimaFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BMIFeedbackFragment()).commit();
         } else if (val == R.id.nav_about) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ImageUploadFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WeatherFragment()).commit();
         } else if (val == R.id.nav_bmi) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BMIFragment()).commit();
         } else if (val == R.id.nav_admin) { // Nuevo caso para AdminActivity
             Intent intent = new Intent(MainActivity.this, AdminActivity.class);
             startActivity(intent);
         } else if (val == R.id.nav_logout) {
-            Toast.makeText(this, "LOGOUT", Toast.LENGTH_SHORT).show();
-            // Cerrar la aplicación
-            System.exit(0);
+            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class); // Cambiar a WelcomeActivity
+            startActivity(intent);
+            finish(); // Cierra MainActivity
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

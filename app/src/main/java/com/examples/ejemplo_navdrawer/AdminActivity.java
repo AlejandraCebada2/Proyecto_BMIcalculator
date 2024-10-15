@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class AdminActivity extends AppCompatActivity {
 
     private EditText editTextAdminUsername, editTextAdminPassword;
-    private Button buttonLogin;
+    private Button buttonLogin, buttonBack; // Agrega el botón de regreso
     private ListView listViewUsers;
     private UserDatabaseHelper dbHelper;
 
@@ -28,6 +28,7 @@ public class AdminActivity extends AppCompatActivity {
         editTextAdminUsername = findViewById(R.id.editTextAdminUsername);
         editTextAdminPassword = findViewById(R.id.editTextAdminPassword);
         buttonLogin = findViewById(R.id.buttonAdminLogin);
+        buttonBack = findViewById(R.id.buttonBack); // Inicializa el botón de regreso
         listViewUsers = findViewById(R.id.listViewUsers);
         dbHelper = new UserDatabaseHelper(this);
 
@@ -37,6 +38,14 @@ public class AdminActivity extends AppCompatActivity {
                 String username = editTextAdminUsername.getText().toString();
                 String password = editTextAdminPassword.getText().toString();
                 validateAdminCredentials(username, password);
+            }
+        });
+
+        // Configura el click listener para el botón "Regresar"
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Cierra la actividad actual y regresa a la anterior
             }
         });
     }
@@ -67,5 +76,4 @@ public class AdminActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userList);
         listViewUsers.setAdapter(adapter);
     }
-
 }

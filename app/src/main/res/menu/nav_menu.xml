@@ -17,12 +17,12 @@
             android:title="Notes"/>
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/clima"
-            android:title="Clima"/>
+            android:icon="@drawable/baseline_feedback_24"
+            android:title="BMI Feedback"/>
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/image_avance"
-            android:title="Avances"/>
+            android:icon="@drawable/baseline_sports_gymnastics_24"
+            android:title="Workout Weather"/>
 
 
         <!-- Agrega aquí el nuevo ítem para la calculadora de BMI -->

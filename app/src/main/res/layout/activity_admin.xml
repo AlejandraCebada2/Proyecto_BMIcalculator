@@ -24,6 +24,15 @@
         android:layout_height="wrap_content"
         android:text="Iniciar Sesión"
         android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regresar"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+
     <ListView
         android:id="@+id/listViewUsers"
         android:layout_width="match_parent"
