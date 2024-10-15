@@ -1,5 +1,6 @@
 package com.examples.ejemplo_navdrawer;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,8 +23,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class NotesFragment extends Fragment {
@@ -35,6 +41,7 @@ public class NotesFragment extends Fragment {
 
     private FirebaseFirestore db;
     private CollectionReference notesCollection;
+    private TextView textViewDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +50,7 @@ public class NotesFragment extends Fragment {
         editTextNote = view.findViewById(R.id.edit_text_note);
         buttonAddNote = view.findViewById(R.id.button_add_note);
         listViewNotes = view.findViewById(R.id.list_view_notes);
+        textViewDate = view.findViewById(R.id.text_view_date);
         notesList = new ArrayList<>();
 
         // Inicializar Firestore
@@ -55,20 +63,30 @@ public class NotesFragment extends Fragment {
 
         buttonAddNote.setOnClickListener(v -> addOrUpdateNote());
 
+        // Configurar el botón para seleccionar fecha
+        view.findViewById(R.id.button_select_date).setOnClickListener(v -> showDatePickerDialog());
+
         return view;
     }
 
     private void addOrUpdateNote() {
         String noteContent = editTextNote.getText().toString();
+        String noteDate = textViewDate.getText().toString().replace("Fecha: ", "");
+        boolean isCompleted = false;
+
         if (!noteContent.isEmpty()) {
+            Log.d("NotesFragment", "Intentando agregar/actualizar nota: " + noteContent + ", " + noteDate);
             if (selectedNoteIndex == -1) {
                 // Agregar nueva nota
                 Map<String, Object> noteData = new HashMap<>();
                 noteData.put("note", noteContent);
+                noteData.put("date", noteDate);
+                noteData.put("isCompleted", isCompleted);
                 notesCollection.add(noteData).addOnSuccessListener(documentReference -> {
-                    notesList.add(new Note(documentReference.getId(), noteContent));
+                    notesList.add(new Note(documentReference.getId(), noteContent, noteDate, isCompleted));
                     notesAdapter.notifyDataSetChanged();
                     editTextNote.setText("");
+                    textViewDate.setText("Fecha: Ninguna");
                     Toast.makeText(getActivity(), "Nota agregada", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
                     Log.e("NotesFragment", "Error al añadir nota: " + e.getMessage());
@@ -76,18 +94,23 @@ public class NotesFragment extends Fragment {
             } else {
                 // Actualizar nota existente
                 String documentId = notesList.get(selectedNoteIndex).getId();
-                notesCollection.document(documentId).update("note", noteContent).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        notesList.get(selectedNoteIndex).setContent(noteContent);
-                        notesAdapter.notifyDataSetChanged();
-                        editTextNote.setText("");
-                        selectedNoteIndex = -1;
-                        Toast.makeText(getActivity(), "Nota actualizada", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.e("NotesFragment", "Error al actualizar nota: " + task.getException());
-                    }
-                });
+                notesCollection.document(documentId).update("note", noteContent, "date", noteDate, "isCompleted", isCompleted)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                notesList.get(selectedNoteIndex).setContent(noteContent);
+                                notesList.get(selectedNoteIndex).setDate(noteDate);
+                                notesAdapter.notifyDataSetChanged();
+                                editTextNote.setText("");
+                                textViewDate.setText("Fecha: Ninguna");
+                                selectedNoteIndex = -1;
+                                Toast.makeText(getActivity(), "Nota actualizada", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e("NotesFragment", "Error al actualizar nota: " + task.getException());
+                            }
+                        });
             }
+        } else {
+            Toast.makeText(getActivity(), "La nota no puede estar vacía", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -97,12 +120,15 @@ public class NotesFragment extends Fragment {
                 notesList.clear();
                 for (DocumentSnapshot document : task.getResult()) {
                     String note = document.getString("note");
-                    if (note != null) {
-                        notesList.add(new Note(document.getId(), note));
+                    String date = document.getString("date");
+                    Boolean isCompleted = document.getBoolean("isCompleted");
+
+                    if (note != null && date != null && isCompleted != null) {
+                        notesList.add(new Note(document.getId(), note, date, isCompleted));
                     }
                 }
                 notesAdapter.notifyDataSetChanged();
-                Log.d("NotesFragment", "Notas cargadas: " + notesList.size()); // Añadir log
+                Log.d("NotesFragment", "Notas cargadas: " + notesList.size());
             } else {
                 Log.e("NotesFragment", "Error al cargar notas: " + task.getException());
                 Toast.makeText(getActivity(), "Error al cargar notas", Toast.LENGTH_SHORT).show();
@@ -111,6 +137,10 @@ public class NotesFragment extends Fragment {
     }
 
     private void deleteNote(int position) {
+        if (position < 0 || position >= notesList.size()) {
+            Log.e("NotesFragment", "Posición no válida para eliminar nota");
+            return;
+        }
         String documentId = notesList.get(position).getId();
         notesCollection.document(documentId).delete().addOnSuccessListener(aVoid -> {
             notesList.remove(position);
@@ -122,8 +152,13 @@ public class NotesFragment extends Fragment {
     }
 
     private void editNote(int position) {
+        if (position < 0 || position >= notesList.size()) {
+            Log.e("NotesFragment", "Posición no válida para editar nota");
+            return;
+        }
         selectedNoteIndex = position;
         editTextNote.setText(notesList.get(position).getContent());
+        textViewDate.setText("Fecha: " + notesList.get(position).getDate());
     }
 
     private class NotesAdapter extends BaseAdapter {
@@ -144,19 +179,31 @@ public class NotesFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            if (position < 0 || position >= notesList.size()) {
+                return convertView;
+            }
+
             if (convertView == null) {
                 convertView = LayoutInflater.from(getActivity()).inflate(R.layout.note_item, parent, false);
             }
 
             TextView textNote = convertView.findViewById(R.id.text_note);
-            Button buttonEdit = convertView.findViewById(R.id.button_edit);
-            Button buttonDelete = convertView.findViewById(R.id.button_delete);
+            TextView textDate = convertView.findViewById(R.id.text_date);
+            CheckBox checkBoxCompleted = convertView.findViewById(R.id.checkbox_completed);
 
             Note note = notesList.get(position);
             textNote.setText(note.getContent());
+            textDate.setText(note.getDate());
+            checkBoxCompleted.setChecked(note.isCompleted());
 
-            buttonEdit.setOnClickListener(v -> editNote(position));
-            buttonDelete.setOnClickListener(v -> deleteNote(position));
+            checkBoxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                note.setCompleted(isChecked);
+                String documentId = note.getId();
+                notesCollection.document(documentId).update("isCompleted", isChecked);
+            });
+
+            convertView.findViewById(R.id.button_edit).setOnClickListener(v -> editNote(position));
+            convertView.findViewById(R.id.button_delete).setOnClickListener(v -> deleteNote(position));
 
             return convertView;
         }
@@ -165,10 +212,14 @@ public class NotesFragment extends Fragment {
     private static class Note {
         private String id;
         private String content;
+        private String date;
+        private boolean isCompleted;
 
-        public Note(String id, String content) {
+        public Note(String id, String content, String date, boolean isCompleted) {
             this.id = id;
             this.content = content;
+            this.date = date;
+            this.isCompleted = isCompleted;
         }
 
         public String getId() {
@@ -179,13 +230,41 @@ public class NotesFragment extends Fragment {
             return content;
         }
 
+        public String getDate() {
+            return date;
+        }
+
+        public boolean isCompleted() {
+            return isCompleted;
+        }
+
         public void setContent(String content) {
             this.content = content;
         }
 
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public void setCompleted(boolean completed) {
+            isCompleted = completed;
+        }
+
         @Override
         public String toString() {
-            return content;
+            return content + " - " + date + (isCompleted ? " (Completada)" : " (No completada)");
         }
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(requireActivity(), (view, selectedYear, selectedMonth, selectedDay) -> {
+            String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+            textViewDate.setText("Fecha: " + selectedDate);
+        }, year, month, day).show();
     }
 }
