@@ -4,31 +4,36 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.examples.ejemplo_navdrawer.BMIAdapter;
+import com.examples.ejemplo_navdrawer.BMIEntry;
+import com.examples.ejemplo_navdrawer.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BMIListFragment extends Fragment {
 
-    private ListView bmiListView;
-    private SharedViewModel sharedViewModel;
-    private ArrayAdapter<String> bmiAdapter;
+    private RecyclerView bmiRecyclerView;
+    private BMIAdapter bmiAdapter;
     private List<String> bmiStringList;
+    private SharedViewModel sharedViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_b_m_i_list, container, false);
 
-        bmiListView = view.findViewById(R.id.bmi_list_view);
+        // Inicializar RecyclerView
+        bmiRecyclerView = view.findViewById(R.id.bmi_recycler_view);
         bmiStringList = new ArrayList<>();
-        bmiAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, bmiStringList);
-        bmiListView.setAdapter(bmiAdapter);
+        bmiAdapter = new BMIAdapter(bmiStringList);
+        bmiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        bmiRecyclerView.setAdapter(bmiAdapter);
 
         // Obtener el ViewModel compartido
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -46,5 +51,5 @@ public class BMIListFragment extends Fragment {
         });
 
         return view;
-    }}
-
+    }
+}
