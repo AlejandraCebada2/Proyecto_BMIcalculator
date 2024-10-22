@@ -1,19 +1,26 @@
 package com.examples.ejemplo_navdrawer;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +30,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +74,9 @@ public class NotesFragment extends Fragment {
         // Configurar el botón para seleccionar fecha
         view.findViewById(R.id.button_select_date).setOnClickListener(v -> showDatePickerDialog());
 
+        // Solicitar permisos de calendario
+        requestCalendarPermissions();
+
         return view;
     }
 
@@ -87,6 +98,9 @@ public class NotesFragment extends Fragment {
                     notesAdapter.notifyDataSetChanged();
                     editTextNote.setText("");
                     textViewDate.setText("Fecha: Ninguna");
+
+                    // Agregar evento al calendario
+                    addEventToCalendar(noteContent, noteDate);
                     Toast.makeText(getActivity(), "Nota agregada", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
                     Log.e("NotesFragment", "Error al añadir nota: " + e.getMessage());
@@ -266,5 +280,82 @@ public class NotesFragment extends Fragment {
             String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
             textViewDate.setText("Fecha: " + selectedDate);
         }, year, month, day).show();
+    }
+
+    private void addEventToCalendar(String noteContent, String noteDate) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getActivity(), "Permisos de calendario no concedidos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        long calendarId = getCalendarId(); // Obtener el calendar_id
+        ContentValues values = new ContentValues();
+        values.put("calendar_id", calendarId);
+        values.put("title", noteContent);
+        values.put("description", "Nota: " + noteContent);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            Date date = sdf.parse(noteDate);
+            long startMillis = date.getTime();
+            values.put("dtstart", startMillis);
+            values.put("dtend", startMillis + 60 * 60 * 1000); // Duración de 1 hora
+            values.put("eventTimezone", Calendar.getInstance().getTimeZone().getID());
+
+            Uri uri = requireActivity().getContentResolver().insert(Uri.parse("content://com.android.calendar/events"), values);
+            if (uri != null) {
+                Toast.makeText(getActivity(), "Evento añadido al calendario", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Error al añadir evento", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private long getCalendarId() {
+        Cursor cursor = requireActivity().getContentResolver().query(
+                Uri.parse("content://com.android.calendar/calendars"),
+                new String[]{"_id"},
+                null,
+                null,
+                null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            long calendarId = cursor.getLong(0);
+            cursor.close();
+            return calendarId;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        throw new IllegalArgumentException("No se encontró un calendario");
+    }
+
+    private void requestCalendarPermissions() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0) {
+                boolean readGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean writeGranted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (readGranted && writeGranted) {
+                    Toast.makeText(getActivity(), "Permisos concedidos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Permisos denegados", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 }

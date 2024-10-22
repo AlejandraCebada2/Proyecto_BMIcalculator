@@ -10,10 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.examples.ejemplo_navdrawer.BMIAdapter;
-import com.examples.ejemplo_navdrawer.BMIEntry;
-import com.examples.ejemplo_navdrawer.SharedViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +17,7 @@ public class BMIListFragment extends Fragment {
 
     private RecyclerView bmiRecyclerView;
     private BMIAdapter bmiAdapter;
-    private List<String> bmiStringList;
+    private List<BmiItem> bmiList; // Cambiar a BmiItem
     private SharedViewModel sharedViewModel;
 
     @Override
@@ -30,8 +26,8 @@ public class BMIListFragment extends Fragment {
 
         // Inicializar RecyclerView
         bmiRecyclerView = view.findViewById(R.id.bmi_recycler_view);
-        bmiStringList = new ArrayList<>();
-        bmiAdapter = new BMIAdapter(bmiStringList);
+        bmiList = new ArrayList<>(); // Inicializar la lista de BmiItem
+        bmiAdapter = new BMIAdapter(bmiList); // Pasar la lista de BmiItem al adapter
         bmiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         bmiRecyclerView.setAdapter(bmiAdapter);
 
@@ -42,11 +38,12 @@ public class BMIListFragment extends Fragment {
         sharedViewModel.getBMIList().observe(getViewLifecycleOwner(), new Observer<List<BMIEntry>>() {
             @Override
             public void onChanged(List<BMIEntry> bmiEntries) {
-                bmiStringList.clear();
+                bmiList.clear(); // Limpiar la lista de BmiItem
                 for (BMIEntry entry : bmiEntries) {
-                    bmiStringList.add(String.format("BMI: %.2f, Fecha: %s", entry.getBmi(), entry.getDate()));
+                    // Crear un nuevo objeto BmiItem y agregarlo a la lista
+                    bmiList.add(new BmiItem(entry.getBmi(), entry.getDate()));
                 }
-                bmiAdapter.notifyDataSetChanged();
+                bmiAdapter.notifyDataSetChanged(); // Notificar al adapter que los datos han cambiado
             }
         });
 
