@@ -1,6 +1,5 @@
 package com.examples.ejemplo_navdrawer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment;
 public class homeFragment extends Fragment {
 
     private TextView tvIntroduccion;
+    private TextView tvWelcome; // TextView para el mensaje de bienvenida
     private Button buttonExplore;
 
     @Override
@@ -25,9 +25,22 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        tvWelcome = view.findViewById(R.id.tv_welcome); // Asegúrate de que este ID coincida
         tvIntroduccion = view.findViewById(R.id.tv_introduccion);
         buttonExplore = view.findViewById(R.id.button_explore);
 
+        // Obtener el nombre de usuario desde los argumentos
+        Bundle args = getArguments();
+        if (args != null) {
+            String username = args.getString("USERNAME");
+            if (username != null && !username.isEmpty()) {
+                tvWelcome.setText("WELCOME TO MEDICAL CARE, " + username);
+            } else {
+                tvWelcome.setText("WELCOME TO MEDICAL CARE"); // Mensaje por defecto si no hay usuario
+            }
+        }
+
+        // Configura el mensaje de introducción
         tvIntroduccion.setText("Bienvenido a nuestra aplicación de herramientas útiles. \n\n" +
                 "En nuestra aplicación, podrás acceder a una variedad de herramientas prácticas y fáciles de usar, \n" +
                 "como nuestra pantalla de inicio, donde podrás encontrar información importante, \n" +
@@ -37,6 +50,7 @@ public class homeFragment extends Fragment {
                 "y nuestra herramienta de conversión de divisas, para ayudarte con tus necesidades de cambio de moneda. \n\n" +
                 "Explora nuestra aplicación y descubre todas las formas en que podemos ayudarte.");
 
+        // Configura el botón de explorar
         buttonExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,8 +63,6 @@ public class homeFragment extends Fragment {
                 }
             }
         });
-
-
 
         return view;
     }

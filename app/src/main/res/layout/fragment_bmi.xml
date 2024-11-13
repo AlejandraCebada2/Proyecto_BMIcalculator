@@ -13,8 +13,8 @@
         android:id="@+id/tv_bienvenida"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bienvenido a la Calculadora de BMI"
-        android:textSize="24sp"
+        android:text="Calcula tu indice de masa corporal"
+        android:textSize="30dp"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         android:gravity="center"
@@ -70,7 +70,6 @@
             android:background="@drawable/edittext_background" />
     </LinearLayout>
 
-    <!-- Botón Calcular -->
     <Button
         android:id="@+id/btn_calcular"
         android:layout_width="match_parent"

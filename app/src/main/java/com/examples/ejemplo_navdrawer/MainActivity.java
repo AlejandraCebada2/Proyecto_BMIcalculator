@@ -1,6 +1,6 @@
 package com.examples.ejemplo_navdrawer;
 
-import android.content.Intent; // Make sure to import Intent
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -35,7 +35,16 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new homeFragment()).commit();
+            // Obtén el nombre de usuario
+            String username = getIntent().getStringExtra("USERNAME");
+
+            // Crea el fragmento y pasa el nombre de usuario
+            homeFragment fragment = new homeFragment();
+            Bundle args = new Bundle();
+            args.putString("USERNAME", username); // Pasa el nombre de usuario
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
     }
@@ -44,7 +53,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int val = item.getItemId();
         if (val == R.id.nav_home) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new homeFragment()).commit();
+            homeFragment fragment = new homeFragment();
+            // Si es homeFragment, también pasa el nombre de usuario
+            String username = getIntent().getStringExtra("USERNAME");
+            Bundle args = new Bundle();
+            args.putString("USERNAME", username);
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         } else if (val == R.id.nav_setting) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
         } else if (val == R.id.nav_share) {

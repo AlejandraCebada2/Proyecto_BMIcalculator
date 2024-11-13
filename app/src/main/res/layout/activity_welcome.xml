@@ -13,35 +13,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="¡Bienvenido a BMI CALCULATOR!"
-        android:textSize="30sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
-        android:layout_marginBottom="32dp" />
+        android:fontFamily="@font/roboto_bold"
+        android:layout_marginBottom="24dp"
+        android:shadowColor="#000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4" />
 
+    <!-- Línea decorativa mejorada -->
     <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="4dp"
         android:background="@drawable/liquid_line"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="24dp"
+        android:elevation="4dp" />
+
 
     <Button
         android:id="@+id/button_get_started"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GET STARTED"
-        android:backgroundTint="@color/black"
-        android:textColor="@android:color/white"
-        android:padding="20dp"
         android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/white"
         android:drawableStart="@drawable/ic_arrow"
         android:drawablePadding="8dp"
-        android:layout_marginTop="16dp" />
+        android:padding="20dp"
+        android:text="GET STARTED"
+        android:textColor="@color/black"
+        android:textColorLink="#000000" />
+
 
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="4dp"
         android:background="@drawable/liquid_line"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"/>
 </LinearLayout>

@@ -16,5 +16,9 @@
         <color name="colorPRImary">#6200EE</color>
         <color name="colorACCENT">#03DAC5</color>
         <color name="colorprima">#6200EE</color>
+    <color name="backgroundColor">#FFFDE7</color> <!-- Amarillo claro -->
+
+
+
 
 </resources>

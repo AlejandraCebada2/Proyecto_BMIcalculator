@@ -19,16 +19,14 @@
             android:scaleType="centerCrop"
             android:contentDescription="@string/welcome_image_desc" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¡Bienvenido a nuestra aplicación!"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:layout_marginBottom="8dp" />
+        <TextView android:id="@+id/tv_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¡BIENVENID@ A NUESTRA APLICACIÓN!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tv_introduccion"
@@ -64,7 +62,144 @@
             android:elevation="2dp"
             android:padding="16dp"
             android:layout_marginBottom="20dp"/>
+        <!-- Feature 1 -->
+        <TextView
+            android:id="@+id/tv_feature_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
 
+        <TextView
+            android:id="@+id/tv_feature_1_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aquí podrás observar los elementos que contiene nuestra applicación, desde un inicio basico dando la bienvenida al usuario hasta encontrar la calculadora de indice de masa corporal "
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+        <!-- Feature 2 -->
+        <TextView
+            android:id="@+id/tv_feature_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_feature_2_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breve introducción sobre la característica 1."
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+        <!-- Feature 3 -->
+        <TextView
+            android:id="@+id/tv_feature_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_feature_3_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breve introducción sobre la característica 1."
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+        <!-- Feature 4 -->
+        <TextView
+            android:id="@+id/tv_feature_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_feature_4_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breve introducción sobre la característica 1."
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+        <!-- Feature 5 -->
+        <TextView
+            android:id="@+id/tv_feature_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_feature_5_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breve introducción sobre la característica 1."
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+        <!-- Feature 6 -->
+        <TextView
+            android:id="@+id/tv_feature_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Características 1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_feature_6_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breve introducción sobre la característica 1."
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"
+            android:background="@android:color/white"
+            android:elevation="1dp"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
         <Button
             android:id="@+id/button_explore"
             android:layout_width="match_parent"
