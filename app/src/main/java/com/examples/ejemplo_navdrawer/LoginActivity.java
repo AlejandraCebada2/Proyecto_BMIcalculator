@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +16,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText editTextUsername, editTextPassword;
     private Button buttonLogin;
-    private TextView textViewRegister;
     private FirebaseAuth mAuth;
 
     @Override
@@ -25,48 +23,48 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Inicializar las vistas y FirebaseAuth
-        editTextUsername = findViewById(R.id.editTextUsername);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        buttonLogin = findViewById(R.id.button_login);
-        textViewRegister = findViewById(R.id.textViewRegister);
+        // Inicializar vistas y FirebaseAuth
+        editTextUsername = findViewById(R.id.emailEditText);
+        editTextPassword = findViewById(R.id.passwordEditText);
+        buttonLogin = findViewById(R.id.loginButton);
         mAuth = FirebaseAuth.getInstance();
 
+        // Manejar el botón de inicio de sesión
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = editTextUsername.getText().toString().trim();
                 String password = editTextPassword.getText().toString();
 
-                // Validar los campos
+                // Validar que los campos no estén vacíos
                 if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Por favor, ingrese todos los campos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Por favor, ingrese su correo y contraseña", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Iniciar sesión con Firebase
+                // Autenticar al usuario con Firebase
                 mAuth.signInWithEmailAndPassword(username, password)
                         .addOnCompleteListener(LoginActivity.this, task -> {
                             if (task.isSuccessful()) {
-                                // Iniciar sesión exitoso
+                                // Inicio de sesión exitoso
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(LoginActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("USERNAME", user.getEmail()); // Pasar el correo a MainActivity
                                 startActivity(intent);
                                 finish();
                             } else {
                                 // Error en el inicio de sesión
-                                Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Error al iniciar sesión: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
             }
         });
 
-        textViewRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        // Manejar la redirección al registro
+        findViewById(R.id.registerTextView).setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }

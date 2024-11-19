@@ -13,9 +13,9 @@
 
     <string name="home">Inicio</string>
     <string name="notes">Notas</string>
-    <string name="clima">Clima</string>
+    <string name="clima">Workout Weather</string>
     <string name="avances">Avances</string>
     <string name="feature_bmi_calculator">Calculadora de BMI</string>
     //AQUI PUEDES AGREGAR LA FORMA DE LA LISTA//
-    <string name="feature_list">- Home\n- Notes \n- Calculadora de BMI (Índice de Masa Corporal) \n- Avances \n-</string>
+    <string name="feature_list">- Home\n- Notes \n- Calculadora de BMI (Índice de Masa Corporal) \n- Workout Weather \n- BMI Feedback \n </string>
 </resources>

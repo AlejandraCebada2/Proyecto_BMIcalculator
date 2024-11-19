@@ -37,11 +37,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // Validar que los campos no estén vacíos
                 if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Por favor, ingrese un nombre de usuario y una contraseña", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Por favor, ingrese un nombre de Correo y una contraseña", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Verificar que la contraseña tenga al menos 6 caracteres
+                // Verificar que la contraseña tenga al menos 8caracteres
                 if (password.length() < 8) {
                     Toast.makeText(RegisterActivity.this, "La contraseña debe tener al menos 8 caracteres", Toast.LENGTH_SHORT).show();
                     return;

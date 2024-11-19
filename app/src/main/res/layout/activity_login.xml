@@ -1,44 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="16dp"
-    android:background="@drawable/background_gradient">
+    android:background="@drawable/bg"
+    android:gravity="center">
 
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"
+        android:contentDescription="Logo de la aplicación" />
+
+    <!-- Espaciado -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <!-- Campo de Correo -->
     <EditText
-        android:id="@+id/editTextUsername"
+        android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:hint="Usuario"
-        android:padding="16dp" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:hint="Contraseña"
+        android:hint="Correo electrónico"
+        android:inputType="textEmailAddress"
         android:padding="16dp"
-        android:inputType="textPassword" />
+        android:drawableStart="@android:drawable/ic_menu_send"
+        android:minHeight="48dp"
+        android:background="@android:drawable/editbox_background" />
 
-    <Button
-        android:id="@+id/button_login"
+    <!-- Campo de Contraseña -->
+    <EditText
+        android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:backgroundTint="@color/colorAccent"
-        android:textColor="@android:color/white"
-        android:padding="16dp" />
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:drawableStart="@android:drawable/ic_lock_lock"
+        android:minHeight="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/editbox_background" />
 
-    <TextView
-        android:id="@+id/textViewRegister"
-        android:layout_width="wrap_content"
+    <!-- Botón de Login -->
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¿No tienes una cuenta? Regístrate aquí."
+        android:text="Iniciar sesión"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
-        android:clickable="true" />
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:textColor="@android:color/white" />
+
+    <!-- Texto de registro -->
+    <TextView
+        android:id="@+id/registerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="¿No tienes una cuenta? Regístrate"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="16dp"
+        android:background="?android:attr/selectableItemBackground" />
 </LinearLayout>
