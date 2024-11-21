@@ -41,14 +41,13 @@ public class homeFragment extends Fragment {
         }
 
         // Configura el mensaje de introducción
-        tvIntroduccion.setText("Bienvenido a nuestra aplicación de herramientas útiles. \n\n" +
-                "En nuestra aplicación, podrás acceder a una variedad de herramientas prácticas y fáciles de usar, \n" +
-                "como nuestra pantalla de inicio, donde podrás encontrar información importante, \n" +
-                "nuestra calculadora de propinas, para ayudarte a calcular la cantidad adecuada, \n" +
-                "nuestra calculadora de Índice de Masa Corporal (BMI), para evaluar tu salud, \n" +
-                "nuestra sección de clima, para mantenerse informado sobre el tiempo, \n" +
-                "y nuestra herramienta de conversión de divisas, para ayudarte con tus necesidades de cambio de moneda. \n\n" +
-                "Explora nuestra aplicación y descubre todas las formas en que podemos ayudarte.");
+        // Configura el mensaje de introducción
+        tvIntroduccion.setText("Bienvenido a Medical Care. \n\n" +
+                "En nuestra aplicación, podrás acceder a herramientas prácticas y enfocadas en tu salud, \n" +
+                "como nuestra calculadora de Índice de Masa Corporal (BMI), para evaluar tu peso y obtener feedback, \n" +
+                "un menú intuitivo con opciones para registrar notas importantes en un calendario, \n" +
+                "y un sistema de resultados que te ayudará a comprender mejor tu estado físico. \n\n" +
+                "Explora Medical Care y descubre todas las maneras en que podemos ayudarte a llevar un estilo de vida más saludable.");
 
         // Configura el botón de explorar
         buttonExplore.setOnClickListener(new View.OnClickListener() {
@@ -67,3 +66,4 @@ public class homeFragment extends Fragment {
         return view;
     }
 }
+

@@ -26,6 +26,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,13 +42,13 @@ import java.util.Locale;
 import java.util.Map;
 
 public class NotesFragment extends Fragment {
+
     private EditText editTextNote;
     private FloatingActionButton buttonAddNote;
     private ListView listViewNotes;
     private ArrayList<Note> notesList;
     private NotesAdapter notesAdapter;
     private int selectedNoteIndex = -1;
-
     private FirebaseFirestore db;
     private CollectionReference notesCollection;
     private TextView textViewDate;
@@ -63,8 +65,16 @@ public class NotesFragment extends Fragment {
 
         // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
-        notesCollection = db.collection("notes");
-        loadNotes();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user != null ? user.getUid() : null;
+
+        if (userId != null) {
+            notesCollection = db.collection("users").document(userId).collection("notes");
+            loadNotes();
+        } else {
+            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            return view;
+        }
 
         notesAdapter = new NotesAdapter();
         listViewNotes.setAdapter(notesAdapter);

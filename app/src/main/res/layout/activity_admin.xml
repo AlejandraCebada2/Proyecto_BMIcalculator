@@ -5,26 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editTextAdminUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre de usuario" />
-
-    <EditText
-        android:id="@+id/editTextAdminPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/buttonAdminLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:layout_gravity="center" />
-
+    <!-- Botón para regresar -->
     <Button
         android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
@@ -33,10 +14,72 @@
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
 
+    <!-- Lista de desarrolladores -->
     <ListView
-        android:id="@+id/listViewUsers"
+        android:id="@+id/listViewDevelopers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="16dp" />
 
+    <!-- Redes sociales -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/iconFacebook"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_facebook"
+            android:contentDescription="Facebook"
+            android:layout_margin="8dp" />
+
+        <ImageView
+            android:id="@+id/iconTwitter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_twitter"
+            android:contentDescription="X"
+            android:layout_margin="8dp" />
+
+        <ImageView
+            android:id="@+id/iconInstagram"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_instagram"
+            android:contentDescription="Instagram"
+            android:layout_margin="8dp" />
+
+        <ImageView
+            android:id="@+id/iconYouTube"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_youtube"
+            android:contentDescription="YouTube"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+    <!-- Texto de políticas y derechos reservados -->
+    <TextView
+        android:id="@+id/textRightsReserved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Derechos reservados © 2024 FITGAUGE"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Política de privacidad | Términos de uso | No vender mi información"
+        android:layout_gravity="center"
+        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+        android:textColor="#0000FF"
+        android:textStyle="italic" />
 </LinearLayout>

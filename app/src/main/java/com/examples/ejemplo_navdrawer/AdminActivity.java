@@ -1,79 +1,69 @@
 package com.examples.ejemplo_navdrawer;
 
-import android.annotation.SuppressLint;
-import android.database.Cursor;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
 
-    private EditText editTextAdminUsername, editTextAdminPassword;
-    private Button buttonLogin, buttonBack; // Agrega el botón de regreso
-    private ListView listViewUsers;
-    private UserDatabaseHelper dbHelper;
+    private Button buttonBack;
+    private ListView listViewDevelopers;
+    private TextView textRightsReserved;
+
+    private ImageView iconFacebook, iconTwitter, iconInstagram, iconYouTube;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        editTextAdminUsername = findViewById(R.id.editTextAdminUsername);
-        editTextAdminPassword = findViewById(R.id.editTextAdminPassword);
-        buttonLogin = findViewById(R.id.buttonAdminLogin);
-        buttonBack = findViewById(R.id.buttonBack); // Inicializa el botón de regreso
-        listViewUsers = findViewById(R.id.listViewUsers);
-        dbHelper = new UserDatabaseHelper(this);
+        buttonBack = findViewById(R.id.buttonBack);
+        listViewDevelopers = findViewById(R.id.listViewDevelopers);
+        textRightsReserved = findViewById(R.id.textRightsReserved);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = editTextAdminUsername.getText().toString();
-                String password = editTextAdminPassword.getText().toString();
-                validateAdminCredentials(username, password);
-            }
-        });
+        // Iconos de redes sociales
+        iconFacebook = findViewById(R.id.iconFacebook);
+        iconTwitter = findViewById(R.id.iconTwitter);
+        iconInstagram = findViewById(R.id.iconInstagram);
+        iconYouTube = findViewById(R.id.iconYouTube);
 
-        // Configura el click listener para el botón "Regresar"
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Cierra la actividad actual y regresa a la anterior
-            }
-        });
+        // Acción para regresar
+        buttonBack.setOnClickListener(v -> finish());
+
+        // Cargar lista de desarrolladores
+        loadDevelopers();
+
+        // Configurar los clics para los íconos de redes sociales
+        setSocialMediaLinks();
     }
 
-    private void validateAdminCredentials(String username, String password) {
-        if (username.equals("admin") && password.equals("admin123")) {
-            // Acceso concedido
-            loadUsers();
-        } else {
-            // Acceso denegado
-            Toast.makeText(this, "Acceso denegado", Toast.LENGTH_SHORT).show();
-        }
+    private void loadDevelopers() {
+        ArrayList<String> developerList = new ArrayList<>();
+        developerList.add("Evelyn A. Cebada Cortés - Desarrolladora Principal");
+        developerList.add("Pedro Everardo Hernández Valerio - Desarrollador Backend");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, developerList);
+        listViewDevelopers.setAdapter(adapter);
     }
 
-    private void loadUsers() {
-        Cursor cursor = dbHelper.getAllUsers(); // Obtener todos los usuarios
-        ArrayList<String> userList = new ArrayList<>();
+    private void setSocialMediaLinks() {
+        iconFacebook.setOnClickListener(v -> openLink("https://www.facebook.com"));
+        iconTwitter.setOnClickListener(v -> openLink("https://www.twitter.com"));
+        iconInstagram.setOnClickListener(v -> openLink("https://www.instagram.com"));
+        iconYouTube.setOnClickListener(v -> openLink("https://www.youtube.com"));
+    }
 
-        if (cursor.moveToFirst()) {
-            do {
-                // Usa COLUMN_USERNAME en lugar de "username"
-                @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex(UserDatabaseHelper.COLUMN_USERNAME));
-                userList.add(username);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userList);
-        listViewUsers.setAdapter(adapter);
+    private void openLink(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
     }
 }
