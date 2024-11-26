@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Date;
+
 public class BMIFragment extends Fragment {
 
     private EditText etPeso, etAltura;
@@ -74,25 +76,30 @@ public class BMIFragment extends Fragment {
             double altura = Double.parseDouble(alturaStr) / 100; // Convertir altura de cm a m
 
             double bmi = peso / (altura * altura);
-
-            // Agregar el BMI a la lista en el ViewModel
-            sharedViewModel.addBMI(bmi);
-
-            String resultado = String.format("Tu BMI es: %.2f", bmi);
+            String categoria;
 
             if (bmi < 18.5) {
-                resultado += "\nCategoría: Bajo peso";
+                categoria = "Bajo peso";
             } else if (bmi < 25) {
-                resultado += "\nCategoría: Peso normal";
+                categoria = "Peso normal";
             } else if (bmi < 30) {
-                resultado += "\nCategoría: Sobrepeso";
+                categoria = "Sobrepeso";
             } else {
-                resultado += "\nCategoría: Obesidad";
+                categoria = "Obesidad";
             }
 
+            // Crear el objeto BmiItem con la fecha actual
+            BmiItem newBmiItem = new BmiItem(bmi, categoria, new Date()); // Usamos la fecha actual
+
+            // Agregar el BMI a la lista en el ViewModel
+            sharedViewModel.addBMI(bmi); // Se pasa solo el valor de BMI aquí
+
+            String resultado = String.format("Tu BMI es: %.2f\nCategoría: %s", bmi, categoria);
             tvResultado.setText(resultado);
         } catch (NumberFormatException e) {
             Toast.makeText(getActivity(), "Error en los valores ingresados", Toast.LENGTH_SHORT).show();
         }
     }
 }
+
+

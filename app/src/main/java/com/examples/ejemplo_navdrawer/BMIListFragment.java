@@ -17,7 +17,7 @@ public class BMIListFragment extends Fragment {
 
     private RecyclerView bmiRecyclerView;
     private BMIAdapter bmiAdapter;
-    private List<BmiItem> bmiList; // Cambiar a BmiItem
+    private List<BmiItem> bmiList; // Lista de BmiItem
     private SharedViewModel sharedViewModel;
 
     @Override
@@ -34,15 +34,12 @@ public class BMIListFragment extends Fragment {
         // Obtener el ViewModel compartido
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        // Observar la lista de BMIs
-        sharedViewModel.getBMIList().observe(getViewLifecycleOwner(), new Observer<List<BMIEntry>>() {
+        // Observar la lista de BmiItems
+        sharedViewModel.getBMIList().observe(getViewLifecycleOwner(), new Observer<List<BmiItem>>() {
             @Override
-            public void onChanged(List<BMIEntry> bmiEntries) {
-                bmiList.clear(); // Limpiar la lista de BmiItem
-                for (BMIEntry entry : bmiEntries) {
-                    // Crear un nuevo objeto BmiItem y agregarlo a la lista
-                    bmiList.add(new BmiItem(entry.getBmi(), entry.getDate()));
-                }
+            public void onChanged(List<BmiItem> bmiItems) {
+                bmiList.clear(); // Limpiar la lista de BmiItems
+                bmiList.addAll(bmiItems); // Agregar los nuevos BmiItems a la lista
                 bmiAdapter.notifyDataSetChanged(); // Notificar al adapter que los datos han cambiado
             }
         });

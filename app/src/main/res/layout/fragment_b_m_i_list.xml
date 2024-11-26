@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- RecyclerView para mostrar la lista de BMIs -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bmi_recycler_view"
         android:layout_width="match_parent"

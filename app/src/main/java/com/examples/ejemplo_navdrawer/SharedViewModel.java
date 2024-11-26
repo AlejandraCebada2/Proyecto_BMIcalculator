@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class SharedViewModel extends ViewModel {
-    private final MutableLiveData<List<BMIEntry>> bmiList = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<BmiItem>> bmiList = new MutableLiveData<>(new ArrayList<>());
     private DatabaseReference databaseReference;
     private SharedPreferences prefs;
 
@@ -35,52 +35,66 @@ public class SharedViewModel extends ViewModel {
         loadBMIListFromFirebase();
     }
 
-    public LiveData<List<BMIEntry>> getBMIList() {
+    public LiveData<List<BmiItem>> getBMIList() {
         return bmiList;
     }
 
+    // Método para agregar un BMI
     public void addBMI(double bmiValue) {
-        String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-        BMIEntry entry = new BMIEntry(bmiValue, currentDate);
+        // Obtener la fecha actual
+        Date currentDate = new Date();
 
-        // Guardar en Firebase
-        // Guardar en Firebase
+        // Determinar la categoría
+        String categoria;
+        if (bmiValue < 18.5) {
+            categoria = "Bajo peso";
+        } else if (bmiValue < 25) {
+            categoria = "Peso normal";
+        } else if (bmiValue < 30) {
+            categoria = "Sobrepeso";
+        } else {
+            categoria = "Obesidad";
+        }
+
+        // Crear un nuevo objeto BmiItem con la categoría y la fecha
+        BmiItem newBmiItem = new BmiItem(bmiValue, categoria, currentDate);
+
+        // Guardar el BMI en Firebase
         String id = databaseReference.push().getKey();
         if (id != null) {
-            databaseReference.child(id).setValue(entry).addOnCompleteListener(task -> {
+            databaseReference.child(id).setValue(newBmiItem).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    // Datos guardados correctamente
                     Log.d("FirebaseSuccess", "Datos guardados correctamente en Firebase.");
                 } else {
-                    // Manejar el error
                     Log.e("FirebaseError", "Error al guardar datos: ", task.getException());
                 }
             });
         }
 
-// Guardar localmente
-        saveBMIListLocally(entry);
+        // Guardar localmente
+        saveBMIListLocally(newBmiItem);
 
-// Agregar a la lista local
-        List<BMIEntry> currentList = bmiList.getValue();
+        // Actualizar la lista local
+        List<BmiItem> currentList = bmiList.getValue();
         if (currentList != null) {
-            currentList.add(entry);
-            bmiList.setValue(currentList);
+            currentList.add(newBmiItem);
+            bmiList.setValue(currentList); // Actualizar LiveData
         }
-
     }
 
-    private void saveBMIListLocally(BMIEntry entry) {
+    // Guardar la lista localmente en SharedPreferences
+    private void saveBMIListLocally(BmiItem newBmiItem) {
         SharedPreferences.Editor editor = prefs.edit();
         String existingEntries = prefs.getString(BMI_KEY, "");
-        String newEntry = entry.getBmi() + "," + entry.getDate() + ";";
+        String newEntry = newBmiItem.getValue() + "," + newBmiItem.getCategory() + "," + new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(newBmiItem.getDate()) + ";";
         editor.putString(BMI_KEY, existingEntries + newEntry);
         editor.apply();
     }
 
+    // Cargar la lista de BMIs desde SharedPreferences
     private void loadBMIListFromLocal() {
         String bmiListString = prefs.getString(BMI_KEY, "");
-        List<BMIEntry> localBmiList = new ArrayList<>();
+        List<BmiItem> localBmiList = new ArrayList<>();
 
         if (!bmiListString.isEmpty()) {
             String[] bmiArray = bmiListString.split(";");
@@ -88,30 +102,39 @@ public class SharedViewModel extends ViewModel {
                 if (!bmiEntry.isEmpty()) {
                     String[] parts = bmiEntry.split(",");
                     double bmi = Double.parseDouble(parts[0]);
-                    String date = parts[1];
-                    localBmiList.add(new BMIEntry(bmi, date));
+                    String categoria = parts[1];
+                    String dateString = parts[2];
+
+                    try {
+                        Date date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateString);
+                        localBmiList.add(new BmiItem(bmi, categoria, date));
+                    } catch (Exception e) {
+                        Log.e("SharedPrefs", "Error al convertir la fecha: " + e.getMessage());
+                    }
                 }
             }
         }
         bmiList.setValue(localBmiList);
     }
 
+    // Cargar la lista de Firebase
     private void loadBMIListFromFirebase() {
-        // Aquí puedes usar un ValueEventListener para cargar desde Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<BMIEntry> firebaseBmiList = new ArrayList<>();
+                List<BmiItem> firebaseBmiList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    BMIEntry entry = snapshot.getValue(BMIEntry.class);
-                    firebaseBmiList.add(entry);
+                    BmiItem entry = snapshot.getValue(BmiItem.class);
+                    if (entry != null) {
+                        firebaseBmiList.add(entry);
+                    }
                 }
                 bmiList.postValue(firebaseBmiList);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Manejar el error
+                Log.e("FirebaseError", "Error al cargar datos desde Firebase: " + databaseError.getMessage());
             }
         });
     }

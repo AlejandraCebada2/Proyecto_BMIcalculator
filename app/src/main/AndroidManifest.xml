@@ -22,7 +22,12 @@
         <!-- Declarar WelcomeActivity como la actividad principal -->
         <activity
             android:name=".WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowEnterTransition="@android:anim/fade_in"
+            android:windowExitTransition="@android:anim/fade_out"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
